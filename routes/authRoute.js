@@ -3,6 +3,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import { VerifyToken } from "../middleware/verifyToken.js";
 import User from "../models/userModel.js";
+import { signIn, signUp } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.get(
     try {
       const token = jwt.sign(
         { id: req.user.id, email: req.user.email },
-        process.env.JWT_SECRET_KEY,
+        process.env.process.env.JWT_SECRET_KEY,
         { expiresIn: "7d" }
       );
       res.cookie("token", token, {
@@ -55,5 +56,8 @@ router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ status: true, message: "Logged out successfully" });
 });
+
+router.post("/signup", signUp);
+router.post("/signin", signIn);
 
 export default router;

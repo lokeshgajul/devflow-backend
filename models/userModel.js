@@ -3,11 +3,18 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
+    trim: true,
+    required: false,
   },
   email: {
     type: String,
     unique: true,
     required: true,
+  },
+  authProvider: {
+    type: String,
+    enum: ["email/password", "google"],
+    default: "email/password",
   },
   password: {
     type: String,
@@ -17,6 +24,10 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 const User = mongoose.model("User", userSchema);
