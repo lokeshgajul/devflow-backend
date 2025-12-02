@@ -24,7 +24,7 @@ router.get(
     try {
       const token = jwt.sign(
         { id: req.user.id, email: req.user.email },
-        process.env.process.env.JWT_SECRET_KEY,
+        process.env.JWT_SECRET_KEY,
         { expiresIn: "7d" }
       );
       res.cookie("token", token, {
@@ -44,7 +44,7 @@ router.get(
 router.get("/verify", VerifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    console.log("user ", user);
+    // console.log("user ", user);
 
     return res.json({ sucess: true, user });
   } catch (error) {

@@ -7,7 +7,7 @@ export const signUp = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(201).json({ message: "All fields are required " });
+      return res.status(400).json({ message: "All fields are required " });
     }
 
     const isEmailExist = await User.findOne({ email });
@@ -40,7 +40,7 @@ export const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(201).json({ message: "All fields are required " });
+      return res.status(400).json({ message: "All fields are required " });
     }
 
     const user = await User.findOne({ email }).select("+password");

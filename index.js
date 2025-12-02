@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import { connectDb } from "./db/Db.js";
 import authRoute from "./routes/authRoute.js";
 import "./config/passport.js";
+import questionRoute from "./routes/questionRoute.js";
+import { createHashtags } from "./controllers/questionController.js";
 
 const app = express();
 connectDb();
@@ -22,6 +24,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/api", questionRoute);
+app.post("/createHashtags", createHashtags);
+
 app.listen(3000, (req, res) => {
   console.log("Listening at port 3000");
 });
