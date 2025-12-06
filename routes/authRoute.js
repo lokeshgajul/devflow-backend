@@ -45,7 +45,6 @@ router.get("/verify", VerifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     // console.log("user ", user);
-
     return res.json({ sucess: true, user });
   } catch (error) {
     return res.status(500).json({ status: false });

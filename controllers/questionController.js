@@ -31,15 +31,18 @@ export const createHashtags = async (hashtags) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 export const askQuestion = async (req, res) => {
   try {
-    const { userId, username, title, description, hashtags } = req.body;
+    const { userId, username, title, description, codeSnippet, hashtags } =
+      req.body;
 
     if (
       !userId ||
       !username ||
       !title ||
       !description ||
+      !codeSnippet ||
       !Array.isArray(hashtags)
     ) {
       return res.status(400).json({ message: "All fields are required" });
@@ -57,6 +60,7 @@ export const askQuestion = async (req, res) => {
       username,
       title,
       description,
+      codeSnippet,
       hashtags: hashtasIds,
     });
 
@@ -66,7 +70,54 @@ export const askQuestion = async (req, res) => {
       .status(201)
       .json({ message: "Question posted successfully", newQuestion });
   } catch (error) {
-    console.error("Ask Question Error:", error); // <--- ADD THIS
+    console.error("Ask Question Error:", error);
     return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getAllQuestions = async (req, res) => {
+  try {
+    const allQuestions = await AskQuestion.find()
+      .populate("hashtags")
+      .sort({ createdAt: -1 });
+
+    if (!allQuestions.length) {
+      return res.status(404).json({
+        message: "No questions found",
+        questions: [],
+      });
+    }
+
+    return res.status(200).json({
+      message: "Fetched all questions successfully",
+      total: allQuestions.length,
+      allQuestions,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getQuestionDetailsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "User Id not found " });
+    }
+
+    const details = await AskQuestion.findById(id).populate("hashtags");
+
+    return res.status(200).json({
+      status: true,
+      message: "Question Details fetched successfully",
+      details,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const questionSchema = mongoose.Schema(
+const answerSchema = mongoose.Schema(
   {
     userId: {
       type: String,
@@ -10,30 +10,24 @@ const questionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    avatar: {
-      type: String,
-      required: false,
-    },
-    title: {
+    userAvatar: {
       type: String,
       required: true,
     },
-    description: {
+    questionId: {
       type: String,
       required: true,
     },
-    codeSnippet: {
+    questionTitle: {
       type: String,
       required: true,
     },
-    hashtags: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Hashtag",
-      },
-    ],
+    answer: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
-const AskQuestion = mongoose.model("Question", questionSchema);
-export default AskQuestion;
+const Answer = mongoose.model("Answer", answerSchema);
+export default Answer;
