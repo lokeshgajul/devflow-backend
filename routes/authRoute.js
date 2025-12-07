@@ -8,7 +8,6 @@ import { signIn, signUp } from "../controllers/authController.js";
 const router = express.Router();
 
 // step 1: redirect to google login
-
 router.get(
   "/google",
   passport.authenticate("google", {

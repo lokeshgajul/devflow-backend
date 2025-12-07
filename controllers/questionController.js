@@ -34,8 +34,15 @@ export const createHashtags = async (hashtags) => {
 
 export const askQuestion = async (req, res) => {
   try {
-    const { userId, username, title, description, codeSnippet, hashtags } =
-      req.body;
+    const {
+      userId,
+      username,
+      avatar,
+      title,
+      description,
+      codeSnippet,
+      hashtags,
+    } = req.body;
 
     if (
       !userId ||
@@ -58,6 +65,7 @@ export const askQuestion = async (req, res) => {
     const newQuestion = new AskQuestion({
       userId,
       username,
+      avatar,
       title,
       description,
       codeSnippet,
@@ -119,5 +127,35 @@ export const getQuestionDetailsById = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+export const toggleLike = async (req, res) => {
+  try {
+    const { userId, questionId } = req.body;
+
+    const question = await AskQuestion.findById(questionId);
+
+    if (!question) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    const alreadyLiked = question.likedBy.includes(userId);
+
+    if (alreadyLiked) {
+      question.likedBy.pull(userId);
+      question.likes -= 1;
+    } else {
+      question.likedBy.push(userId);
+      question.likes += 1;
+    }
+    await question.save();
+
+    return res
+      .status(200)
+      .json({ likes: question.likes, liked: !alreadyLiked });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server error ", error });
   }
 };

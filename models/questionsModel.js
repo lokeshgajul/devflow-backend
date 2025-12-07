@@ -16,20 +16,30 @@ const questionSchema = mongoose.Schema(
     },
     title: {
       type: String,
-      required: true,
+      required: false,
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
     codeSnippet: {
       type: String,
-      required: true,
+      required: false,
     },
     hashtags: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Hashtag",
+      },
+    ],
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
