@@ -42,6 +42,12 @@ const questionSchema = mongoose.Schema(
         ref: "User",
       },
     ],
+    comments: {
+      type: Number,
+      default: 0,
+      required: false,
+      // ref: "Answer",
+    },
   },
   { timestamps: true }
 );

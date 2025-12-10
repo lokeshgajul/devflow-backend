@@ -23,7 +23,7 @@ router.get(
     try {
       const token = jwt.sign(
         { id: req.user.id, email: req.user.email },
-        process.env.JWT_SECRET_KEY,
+        "4b2036ea925ded970b347a245dd737d8c0167f5d5a6888989690a3441c2e5797",
         { expiresIn: "7d" }
       );
       res.cookie("token", token, {

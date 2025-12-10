@@ -1,4 +1,5 @@
 import Answer from "../models/answerModel.js";
+import AskQuestion from "../models/questionsModel.js";
 
 export const postAnswerByQuestionId = async (req, res) => {
   try {
@@ -18,6 +19,13 @@ export const postAnswerByQuestionId = async (req, res) => {
       answer,
     });
     await newAnswer.save();
+
+    // increment the count of comment in question model
+    const comment = await AskQuestion.findByIdAndUpdate(questionId, {
+      $inc: { comments: 1 },
+    });
+
+    console.log(comment);
 
     return res
       .status(200)
@@ -49,9 +57,32 @@ export const getAllAnswersByQuestionId = async (req, res) => {
     return res.status(200).json({
       message: "All answers fetched",
       allAnswers,
+      comments: allAnswers.length,
       success: true,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getAllAnswersByUserId = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User Id not found " });
+    }
+
+    const answers = await Answer.find({ userId });
+
+    return res
+      .status(200)
+      .json({ message: "Answer posted by user ", answers, success: true });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+      success: false,
+    });
   }
 };

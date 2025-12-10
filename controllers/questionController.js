@@ -1,5 +1,6 @@
 import Hashtag from "../models/hashtagModel.js";
 import AskQuestion from "../models/questionsModel.js";
+import Answer from "../models/answerModel.js";
 
 export const createHashtags = async (hashtags) => {
   try {
@@ -24,7 +25,6 @@ export const createHashtags = async (hashtags) => {
 
       result.push(existing._id);
     }
-    console.log(result);
 
     return result;
   } catch (error) {
@@ -105,6 +105,28 @@ export const getAllQuestions = async (req, res) => {
     console.log(error);
 
     res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getAllQuestionByUserId = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User Id not found " });
+    }
+
+    const questions = await AskQuestion.find({ userId }).populate("hashtags");
+
+    return res
+      .status(200)
+      .json({ message: "questions posted by user ", questions, success: true });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+      success: false,
+    });
   }
 };
 

@@ -15,7 +15,6 @@ passport.use(
           { googleId: profile.id }
           //   { loginStatus: true }
         );
-
         if (!user) {
           user = await User.create({
             username: profile.displayName,
