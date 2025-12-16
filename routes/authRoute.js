@@ -32,10 +32,10 @@ router.get(
         sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.redirect(`${"http://localhost:5173"}/home`);
+      res.redirect(`${process.env.CLIENT_URL}/home`);
     } catch (error) {
       // console.log("google login error ", error);
-      res.redirect(`${"http://localhost:5173"}/login?error=google_failed`);
+      res.redirect(`${process.env.CLIENT_URL}/login?error=google_failed`);
     }
   }
 );
