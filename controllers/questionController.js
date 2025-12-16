@@ -102,8 +102,6 @@ export const getAllQuestions = async (req, res) => {
       allQuestions,
     });
   } catch (error) {
-    console.log(error);
-
     res.status(500).json({ message: "Internal server error", error });
   }
 };
@@ -177,7 +175,6 @@ export const toggleLike = async (req, res) => {
       .status(200)
       .json({ likes: question.likes, liked: !alreadyLiked });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Internal Server error ", error });
   }
 };

@@ -34,7 +34,7 @@ router.get(
       });
       res.redirect(`${"http://localhost:5173"}/home`);
     } catch (error) {
-      console.log("google login error ", error);
+      // console.log("google login error ", error);
       res.redirect(`${"http://localhost:5173"}/login?error=google_failed`);
     }
   }
@@ -43,7 +43,6 @@ router.get(
 router.get("/verify", VerifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    // console.log("user ", user);
     return res.json({ sucess: true, user });
   } catch (error) {
     return res.status(500).json({ status: false });

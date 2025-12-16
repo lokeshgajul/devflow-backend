@@ -24,9 +24,6 @@ export const postAnswerByQuestionId = async (req, res) => {
     const comment = await AskQuestion.findByIdAndUpdate(questionId, {
       $inc: { comments: 1 },
     });
-
-    console.log(comment);
-
     return res
       .status(200)
       .json({ message: "Answer posted successfully", success: true });
@@ -35,6 +32,7 @@ export const postAnswerByQuestionId = async (req, res) => {
   }
 };
 
+// fetches all answers for specific questions
 export const getAllAnswersByQuestionId = async (req, res) => {
   try {
     const { questionId } = req.body;
@@ -65,6 +63,7 @@ export const getAllAnswersByQuestionId = async (req, res) => {
   }
 };
 
+// fetches all answers posted by specific user
 export const getAllAnswersByUserId = async (req, res) => {
   try {
     const { userId } = req.body;
