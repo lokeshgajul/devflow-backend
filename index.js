@@ -12,7 +12,10 @@ const app = express();
 connectDb();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://devflow-backend-six.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://devflow-qna-platform.netlify.app",
+    ],
     credentials: true,
   })
 );
