@@ -28,14 +28,16 @@ router.get(
       );
       res.cookie("token", token, {
         httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
+        path: "/",
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       });
-      res.redirect(`${process.env.CLIENT_URL}/home`);
+
+      res.redirect(`${process.env.CLIENT_URL}/`);
     } catch (error) {
       // console.log("google login error ", error);
-      res.redirect(`${process.env.CLIENT_URL}/login?error=google_failed`);
+      res.redirect(`${process.env.CLIENT_URL}/signin?error=google_failed`);
     }
   }
 );
@@ -50,11 +52,15 @@ router.get("/verify", VerifyToken, async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
+
   return res.json({ status: true, message: "Logged out successfully" });
 });
 
