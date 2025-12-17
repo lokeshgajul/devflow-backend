@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const dbConnect = async () => {
+export const connectDb = async () => {
   try {
     if (!process.env.DB_URI) {
       throw new Error("Missing mongoUri environment variable");
@@ -13,5 +13,6 @@ export const dbConnect = async () => {
     });
   } catch (error) {
     console.error("MongoDB connection error:", error.message);
+    process.exit(1);
   }
 };
