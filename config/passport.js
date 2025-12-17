@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/userModel.js";
+import { dbConnect } from "../db/Db.js";
 
 passport.use(
   new GoogleStrategy(
@@ -11,6 +12,8 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {
+        await dbConnect();
+
         let user = await User.findOne(
           { googleId: profile.id }
           //   { loginStatus: true }
