@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { connectDb } from "./db/Db.js";
+import { dbConnect } from "./db/Db.js";
 import "./config/passport.js";
 import authRoutes from "./routes/authRoute.js";
 import questionRoutes from "./routes/questionRoute.js";
@@ -9,7 +9,7 @@ import answerRoutes from "./routes/answerRoute.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-connectDb();
+dbConnect();
 app.use(
   cors({
     origin: [
