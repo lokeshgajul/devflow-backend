@@ -38,6 +38,9 @@ router.get(
     } catch (error) {
       // console.log("google login error ", error);
       res.redirect(`${process.env.CLIENT_URL}/signin?error=google_failed`);
+      return res
+        .status(500)
+        .json({ message: "Internal Server Error  ", error: error.message });
     }
   }
 );

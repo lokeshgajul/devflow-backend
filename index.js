@@ -4,8 +4,8 @@ import cookieParser from "cookie-parser";
 import { dbConnect } from "./db/Db.js";
 
 async function startServer() {
-  await dbConnect(); // ✅ DB FIRST
-  await import("./config/passport.js"); // ✅ passport AFTER DB
+  await dbConnect();
+  await import("./config/passport.js");
 
   const app = express();
 
@@ -32,9 +32,12 @@ async function startServer() {
   app.listen(3000, () => {
     console.log("Listening at port 3000");
   });
+
+  app.get("/", () => {
+    console.log("Welcome to devflow backend ");
+  });
 }
 
 startServer().catch((err) => {
-  console.error("❌ Startup failed:", err);
-  process.exit(1);
+  console.error("Startup failed:", err);
 });

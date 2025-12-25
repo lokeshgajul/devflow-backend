@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 
 export const getUserDetailsById = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.user.id;
 
     if (!userId) {
       return res.status(400).json({ message: "User id is not Provided" });
