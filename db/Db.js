@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please define the MONGODB_URI environment ");
+}
 
 let cached = global.mongoose;
 
@@ -11,22 +17,25 @@ export async function dbConnect() {
     return cached.conn;
   }
 
-  if (!process.env.DB_URI) {
-    throw new Error("Missing DB_URI environment variable");
-  }
-
   if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.DB_URI, {
-      serverSelectionTimeoutMS: 10000,
+    const opts = {
       bufferCommands: false,
-    });
+      serverSelectionTimeoutMS: 10000,
+    };
+
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, opts)
+      .then((mongoose) => {
+        return mongoose;
+      });
   }
 
   try {
     cached.conn = await cached.promise;
-  } catch (err) {
+  } catch (e) {
     cached.promise = null;
-    throw err;
+    console.error("Mongoose connection error:", e);
+    throw e;
   }
 
   return cached.conn;

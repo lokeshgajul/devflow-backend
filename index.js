@@ -2,36 +2,39 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./db/Db.js";
-import "./config/passport.js";
-import authRoutes from "./routes/authRoute.js";
-import questionRoutes from "./routes/questionRoute.js";
-import answerRoutes from "./routes/answerRoute.js";
-import userRoutes from "./routes/userRoutes.js";
 
-const app = express();
-dbConnect();
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://devflow-qna-platform.netlify.app",
-    ],
-    credentials: true,
-  })
-);
+async function startServer() {
+  await dbConnect(); // ✅ DB FIRST
+  await import("./config/passport.js"); // ✅ passport AFTER DB
 
-app.use(express.json());
-app.use(cookieParser());
+  const app = express();
 
-app.get("/", (req, res) => {
-  return res.send("Welcome to dev Flow backend ");
-});
+  app.set("trust proxy", 1);
 
-app.use("/auth", authRoutes);
-app.use("/api/question", questionRoutes);
-app.use("/api/answer", answerRoutes);
-app.use("/api/user", userRoutes);
+  app.use(
+    cors({
+      origin: [
+        "http://localhost:5173",
+        "https://devflow-qna-platform.netlify.app",
+      ],
+      credentials: true,
+    })
+  );
 
-app.listen(3000, (req, res) => {
-  console.log("Listening at port 3000");
+  app.use(express.json());
+  app.use(cookieParser());
+
+  app.use("/auth", (await import("./routes/authRoute.js")).default);
+  app.use("/api/question", (await import("./routes/questionRoute.js")).default);
+  app.use("/api/answer", (await import("./routes/answerRoute.js")).default);
+  app.use("/api/user", (await import("./routes/userRoutes.js")).default);
+
+  app.listen(3000, () => {
+    console.log("Listening at port 3000");
+  });
+}
+
+startServer().catch((err) => {
+  console.error("❌ Startup failed:", err);
+  process.exit(1);
 });

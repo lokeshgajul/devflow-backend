@@ -12,7 +12,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {
-        await dbConnect();
+        // await dbConnect();
 
         let user = await User.findOne(
           { googleId: profile.id }
