@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
 
+    profileImage: {
+      type: String,
+      required: false,
+    },
     fullName: {
       type: String,
       default: "",

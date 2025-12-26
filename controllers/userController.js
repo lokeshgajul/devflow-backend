@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const getUserDetailsById = async (req, res) => {
   try {
@@ -15,6 +16,46 @@ export const getUserDetailsById = async (req, res) => {
       .json({ message: "User Details", userDetails, success: true });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error ", error });
+  }
+};
+
+export const updateProfileImage = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const file = req.files.profileImage;
+
+    if (!id) {
+      return res.status(401).json({ message: "Unauthorized user" });
+    }
+
+    if (!req.files || !req.files.profileImage) {
+      return res.status(400).json({ message: "Please upload an image " });
+    }
+
+    const base64Image = `data:${file.mimetype};base64,${file.data.toString(
+      "base64"
+    )}`;
+
+    const result = await cloudinary.uploader.upload(base64Image, {
+      folder: "devflow-users",
+    });
+
+    const profileImage = result.secure_url;
+
+    const userProfile = await User.findByIdAndUpdate(
+      id,
+      { profileImage },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Profile image uploaded successfully",
+      userProfile,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 

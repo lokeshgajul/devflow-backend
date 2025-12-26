@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
+import { v2 as cloudinary } from "cloudinary";
 import { dbConnect } from "./db/Db.js";
 
 async function startServer() {
@@ -23,7 +25,13 @@ async function startServer() {
 
   app.use(express.json());
   app.use(cookieParser());
+  app.use(fileUpload({ useTempFiles: false }));
 
+  cloudinary.config({
+    cloud_name: "dmt2cp7t7",
+    api_key: "382543213736579",
+    api_secret: "Fx9YngYz5sKHChoF17mIXaNZbvg",
+  });
   app.get("/", (req, res) => {
     res.send("Welcome to devflow backend ");
   });
