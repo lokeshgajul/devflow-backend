@@ -44,14 +44,7 @@ export const askQuestion = async (req, res) => {
       hashtags,
     } = req.body;
 
-    if (
-      !userId ||
-      !username ||
-      !title ||
-      !description ||
-      !codeSnippet ||
-      !Array.isArray(hashtags)
-    ) {
+    if (!userId || !username || !title) {
       return res.status(400).json({ message: "All fields are required" });
     }
 

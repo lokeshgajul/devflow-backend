@@ -16,7 +16,7 @@ const questionSchema = mongoose.Schema(
     },
     title: {
       type: String,
-      required: false,
+      required: true,
     },
     description: {
       type: String,

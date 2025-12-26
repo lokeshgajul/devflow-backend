@@ -24,6 +24,10 @@ async function startServer() {
   app.use(express.json());
   app.use(cookieParser());
 
+  app.get("/", (req, res) => {
+    res.send("Welcome to devflow backend ");
+  });
+
   app.use("/auth", (await import("./routes/authRoute.js")).default);
   app.use("/api/question", (await import("./routes/questionRoute.js")).default);
   app.use("/api/answer", (await import("./routes/answerRoute.js")).default);
@@ -31,10 +35,6 @@ async function startServer() {
 
   app.listen(3000, () => {
     console.log("Listening at port 3000");
-  });
-
-  app.get("/", () => {
-    console.log("Welcome to devflow backend ");
   });
 }
 
