@@ -2,6 +2,7 @@ import express from "express";
 import {
   askQuestion,
   createHashtags,
+  deleteQuestion,
   getAllQuestionByUserId,
   getAllQuestions,
   getQuestionDetailsById,
@@ -16,6 +17,7 @@ router.get("/all_question", getAllQuestions);
 router.post("/likes", toggleLike);
 router.post("/createHashtags", createHashtags);
 router.post("/user-questions", getAllQuestionByUserId);
+router.post("/delete_question", deleteQuestion);
 router.post("/:id", VerifyToken, getQuestionDetailsById);
 
 export default router;

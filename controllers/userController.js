@@ -50,7 +50,7 @@ export const updateProfileImage = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Profile image uploaded successfully",
-      userProfile,
+      Profile: userProfile,
     });
   } catch (error) {
     return res
@@ -88,7 +88,7 @@ export const updateProfile = async (req, res) => {
       return res.status(400).json({ success: false, errors });
     }
 
-    const profile = await User.findByIdAndUpdate(
+    const Profile = await User.findByIdAndUpdate(
       userId,
       { $set: req.body },
       { new: true }
@@ -96,7 +96,7 @@ export const updateProfile = async (req, res) => {
 
     return res.status(200).json({
       message: "Profile is updated successfully ",
-      profile,
+      Profile,
       success: true,
     });
   } catch (error) {

@@ -76,6 +76,21 @@ export const askQuestion = async (req, res) => {
   }
 };
 
+export const deleteQuestion = async (req, res) => {
+  // const userId = req.user.id;
+  const { questionId } = req.body;
+
+  if (!questionId) {
+    return res.status(400).json({ message: "Please Provde all the fields " });
+  }
+
+  const newQuestions = await AskQuestion.findByIdAndDelete(questionId);
+
+  return res
+    .status(200)
+    .json({ message: "Question Deleted Successfully ", newQuestions });
+};
+
 export const getAllQuestions = async (req, res) => {
   try {
     const allQuestions = await AskQuestion.find()
